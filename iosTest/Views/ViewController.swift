@@ -34,7 +34,7 @@ class ViewController: UIViewController {
     }
     
     func initViewModel() {
-        //viewModel.getBestSellers()
+        viewModel.getBestSellers()
         viewModel.getBooks()
         viewModel.reloadTableView = { [weak self] in
             DispatchQueue.main.async {
@@ -59,17 +59,16 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let titles = [Genre.business.rawValue, Genre.history.rawValue, Genre.science.rawValue]
+        let titles = ["Best Seller",  "\(Genre.business.rawValue)", "\(Genre.history.rawValue)", "\(Genre.science.rawValue)"]
         return titles[section]
     }
 
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.bookCellViewModels.count
+        return viewModel.bookCellViewModels[section].count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: BooksTableViewCell.identifier, for: indexPath) as? BooksTableViewCell else { fatalError("xib does not exists") }
-        
         let cellVM = viewModel.getCellViewModel(at: indexPath)
         cell.cellViewModel = cellVM
         return cell

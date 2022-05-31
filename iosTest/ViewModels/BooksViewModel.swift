@@ -14,7 +14,7 @@ class BooksViewModel: NSObject {
     var reloadTableView: (() -> Void)?
     
     var books = [Book]()
-    //var bestSellersIds: [String] = []
+    var bestSellersIds: [String] = []
     
     var bookCellViewModels = [[BookCellViewModel]]() {
         didSet {
@@ -29,15 +29,15 @@ class BooksViewModel: NSObject {
     func fetchData(books: [Book]) {
         self.books = books
         
-        //var bestSeller = [BookCellViewModel]()
+        var bestSeller = [BookCellViewModel]()
         var science = [BookCellViewModel]()
         var history = [BookCellViewModel]()
         var business = [BookCellViewModel]()
         
         for book in books {
-            //if bestSellersIds.contains(where: {$0 == book.isbn}) {
-              //  bestSeller.append(createCellModel(book: book))
-            //} else {
+            if bestSellersIds.contains(where: {$0 == book.isbn}) {
+                bestSeller.append(createCellModel(book: book))
+            } else {
                 switch book.genre {
                 case .business:
                     business.append(createCellModel(book: book))
@@ -46,14 +46,14 @@ class BooksViewModel: NSObject {
                 case .science:
                     science.append(createCellModel(book: book))
                 }
-        //}
+            }
         }
-        bookCellViewModels = [business, history, science]
+        bookCellViewModels = [bestSeller, business, history, science]
     }
     
-    /*func fetchData(bestSeller: [String]) {
+    func fetchData(bestSeller: [String]) {
         self.bestSellersIds = bestSeller
-    }*/
+    }
     
     func getBooks() {
         bookService.getBooks { success, model, error in
@@ -66,7 +66,7 @@ class BooksViewModel: NSObject {
         }
     }
     
-    /*func getBestSellers() {
+    func getBestSellers() {
         bookService.getBestSellers { success, model, error in
             if success, let model = model {
                 let bestSellers = model.results.bestSellers
@@ -75,7 +75,7 @@ class BooksViewModel: NSObject {
                 print(error!)
             }
         }
-    }*/
+    }
 
     func createCellModel(book: Book) -> BookCellViewModel {
         let author = book.author
