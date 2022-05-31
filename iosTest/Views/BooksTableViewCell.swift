@@ -16,6 +16,7 @@ class BooksTableViewCell: UITableViewCell {
     
     @IBOutlet var bookCoverImage: UIImageView!
     @IBOutlet var importedImage: UIImageView!
+    @IBOutlet weak var importedLabel: UILabel!
     
     class var identifier: String { return String(describing: self) }
     class var nib: UINib { return UINib(nibName: identifier, bundle: nil) }
@@ -32,9 +33,10 @@ class BooksTableViewCell: UITableViewCell {
             
             if let isImported = cellViewModel?.imported {
                 importedImage.image = UIImage(named: "imported")
+                importedLabel.text = "Imported"
+                importedLabel.isHidden = !isImported
                 importedImage.isHidden = !isImported
             }
-            
         }
     }
     
